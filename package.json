@@ -1,0 +1,26 @@
+{
+  "name": "shang",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel public/index.html --open --https",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dragonfly161518/shang.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dragonfly161518/shang/issues"
+  },
+  "homepage": "https://github.com/Dragonfly161518/shang#readme",
+  "dependencies": {
+    "parcel-bundler": "^1.12.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "tailwindcss": "^1.6.2",
+    "typescript": "^3.9.7"
+  }
+}
