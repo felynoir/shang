@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "parcel public/index.html --open --https",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,10 +17,16 @@
   },
   "homepage": "https://github.com/Dragonfly161518/shang#readme",
   "dependencies": {
+    "fabric": "^3.6.3",
     "parcel-bundler": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "tailwindcss": "^1.6.2",
     "typescript": "^3.9.7"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^10.4.8",
+    "@types/react": "^16.9.45",
+    "jest": "^26.2.2"
   }
 }
