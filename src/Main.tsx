@@ -4,10 +4,10 @@ import Tools from "./Tools";
 
 const Main = () => {
   return (
-    <>
-      <DesignCanvas />
+    <div className="flex flex-row">
       <Tools />
-    </>
+      <DesignCanvas />
+    </div>
   );
 };
 
