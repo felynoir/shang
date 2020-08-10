@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import "./index.css";
-import { CanvasProvider } from "./Canvas";
+import { CanvasProvider } from "./hooks";
 
 import Main from "./Main";
 

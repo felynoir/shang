@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
-import { useCanvas } from "../Canvas";
+import { useCanvas } from "../hooks";
 
 const ratio = [9, 16];
 
