@@ -10,10 +10,8 @@ const DesignCanvas = () => {
   const isFirst = useRef(true);
 
   useEffect(() => {
-    setDimension([
-      (window.innerHeight / ratio[1]) * ratio[0],
-      window.innerHeight,
-    ]);
+    const height = Math.floor(window.innerHeight / ratio[1]) * ratio[1];
+    setDimension([(height / ratio[1]) * ratio[0], height]);
   }, []);
 
   useEffect(() => {
@@ -26,7 +24,14 @@ const DesignCanvas = () => {
   }, [dimension]);
 
   return (
-    <canvas id="canvas" width={dimension[0]} height={dimension[1]}></canvas>
+    <div className="h-screen w-full flex items-center justify-center">
+      <canvas
+        id="canvas"
+        className="shadow-md"
+        width={dimension[0]}
+        height={dimension[1]}
+      ></canvas>
+    </div>
   );
 };
 
