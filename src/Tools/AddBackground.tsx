@@ -20,7 +20,7 @@ const AddBackground = () => {
       >
         <img width="24" height="24" src={AddPhotoSVG} />
       </div>
-      <Modal opened={opened} setOpened={handleAction} />
+      {/* <Modal opened={opened} setOpened={handleAction} /> */}
     </>
   );
 };
