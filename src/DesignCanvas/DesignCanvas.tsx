@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { fabric } from "fabric";
+import { fabric } from "fabric-with-gestures";
 import { useCanvas } from "../hooks";
 
 const ratio = [9, 16];
 
 const DesignCanvas = () => {
-  const { createCanvas } = useCanvas();
+  const { canvas, createCanvas } = useCanvas();
   const [dimension, setDimension] = useState<number[]>([0, 0]);
   const isFirst = useRef(true);
 
