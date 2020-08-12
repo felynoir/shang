@@ -22,5 +22,5 @@
     "skipLibCheck": true
   },
   "include": ["./src/**/*", "custom.d.ts"],
-  "exclude": ["node_modules", "**/*.spec.tsx", "**/*.test.tsx", "dist"]
+  "exclude": ["node_modules", "dist"]
 }

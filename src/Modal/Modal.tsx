@@ -1,13 +1,13 @@
 import React from "react";
 
-export interface ModalContainer {
+export interface ModalContainerType {
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Props {
   opened: boolean;
-  render: React.FC<ModalContainer>;
+  render: React.FC<ModalContainerType>;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

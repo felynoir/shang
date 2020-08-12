@@ -10,6 +10,7 @@ const AddBackground = () => {
 
   const handleAction = (opened) => {
     setOpened(opened);
+    console.log(opened);
   };
 
   return (
@@ -20,7 +21,11 @@ const AddBackground = () => {
       >
         <img width="24" height="24" src={AddPhotoSVG} />
       </div>
-      {/* <Modal opened={opened} setOpened={handleAction} /> */}
+      <Modal
+        opened={opened}
+        setOpened={handleAction}
+        render={(data) => <div>Hi</div>}
+      />
     </>
   );
 };
