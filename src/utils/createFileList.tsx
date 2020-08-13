@@ -1,4 +1,4 @@
-export const getFileList = (files: File[]): FileList => {
+export const createFileList = (files: File[]): FileList => {
   let getDataTransfer: any = () => new DataTransfer();
   try {
     getDataTransfer();
