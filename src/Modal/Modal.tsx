@@ -15,7 +15,7 @@ const Modal: React.FC<Props> = ({ opened, setOpened, children, render }) => {
   console.log("opened", opened);
   if (!opened) return null;
   return (
-    <div className="z-10 fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
+    <div className="z-10 fixed bottom-0 inset-0 px-4 pb-4 flex items-center justify-center">
       <div
         className="fixed inset-0 transition-opacity"
         onClick={() => setOpened(!open)}
