@@ -37,15 +37,10 @@ const Share = () => {
   return (
     <>
       <div
-        className={`flex items-center justify-center rounded-full h-12 w-12 p-3 cursor-pointer ${
-          video ? "" : "bg-red-700"
-        }`}
-        onClick={() => takeAction()}
+        className={`flex items-center justify-center rounded-full h-12 w-12 p-3 cursor-pointer`}
       >
         <img width="24" height="24" src={ShareSVG} />
       </div>
-      <div id="log"></div>
-      <div id="log2"></div>
     </>
   );
 };
