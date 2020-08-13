@@ -3,6 +3,7 @@ import ShareSVG from "../../assets/icons/share-black-18dp.svg";
 import { useCanvas } from "../../hooks";
 
 const Share = () => {
+  const { canvas } = useCanvas();
   const [video, setVideo] = useState<File>();
   const firstRef = useRef(true);
 
@@ -27,25 +28,35 @@ const Share = () => {
   };
 
   const startRecordingCanvas = () => {
-    console.log("start rec");
     const chunks: Blob[] = [];
-    const canvas = document.getElementById("canvas");
-    const stream = canvas.captureStream();
+    const canvasEl = document.getElementById("canvas");
+    const stream = canvasEl.captureStream();
     const rec = new MediaRecorder(stream);
     rec.ondataavailable = (e) => {
       chunks.push(e.data);
       console.log(e.data);
     };
     rec.onstop = (e) => {
-      console.log(chunks);
+      console.log("end rec => ", chunks);
       exportVideo(new File(chunks, "mylove.mp4", { type: "video/mp4" }));
+    };
+    rec.onstart = (e) => {
+      console.log("start rec");
+      canvas.getObjects().map((klass) => {
+        console.log(klass);
+        if (klass?._element?.nodeName === "VIDEO") {
+          klass._element.pause();
+          klass._element.currentTime = 0;
+          klass._element.play();
+        }
+      });
     };
     rec.start();
     setTimeout(() => rec.stop(), 5000); // stop recording in 3s
   };
 
   const exportVideo = async (video: File) => {
-    console.log(video);
+    console.log("export vid", video);
     if (navigator.share === undefined) {
       console.log("Error: Unsupported feature: navigator.share()");
       window.open(URL.createObjectURL(video));
@@ -58,7 +69,7 @@ const Share = () => {
       url: "https://web.dev/",
       files,
     };
-    console.log(data, URL.createObjectURL(files[0]));
+    console.log("all data", data, URL.createObjectURL(files[0]));
 
     if (!navigator.canShare || !navigator.canShare({ files })) {
       console.log("Error: Unsupported feature: navigator.canShare()");

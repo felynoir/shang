@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Dragonfly161518/shang#readme",
   "dependencies": {
+    "ccapture.js": "^1.1.0",
     "fabric": "^3.6.3",
     "fabric-with-gestures": "^4.0.0",
     "hooks": "^0.3.2",
