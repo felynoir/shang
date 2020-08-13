@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import ShareSVG from "../../assets/icons/share-black-18dp.svg";
 import { useCanvas } from "../../hooks";
 import Modal from "../../Modal";

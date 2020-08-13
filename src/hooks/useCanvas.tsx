@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createContext, useContext } from "react";
 import { fabric } from "fabric-with-gestures";
 import { createFileList } from "../utils";
+// import * as CCapture from "ccapture.js";
 
 interface MediaMetadataType {
   name?: string;
@@ -62,7 +63,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
   };
 
   const loadCapturingCanvas = ({
-    name = "myvid.mp4",
+    name = "myvid.webm",
     duration = 5000,
   }): Promise<FileList> => {
     console.log(name, duration);
@@ -73,7 +74,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
           return reject("Canvas Element is not assign");
         }
         // @ts-ignore: Type handling is conflict itself.
-        const stream = canvasEl.captureStream();
+        const stream = canvasEl.captureStream(60);
         const chunks: Blob[] = [];
         const rec = new MediaRecorder(stream);
         rec.ondataavailable = (e) => {
@@ -92,7 +93,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
         };
         rec.onstop = (e) => {
           console.log("end rec => ", chunks);
-          const media = new File(chunks, name, { type: "video/mp4" });
+          const media = new File(chunks, name, { type: "video/webm" });
           const fileList = createFileList([media]);
           setMediaFileList(fileList);
           resolve(fileList);
@@ -104,6 +105,10 @@ export const CanvasProvider: React.FC = ({ children }) => {
       }
     });
   };
+
+  // const loadCanvasViaCCapture = () => {
+  //   const capturer = new CCapture({ format: "webm" });
+  // };
 
   const ctx = {
     canvas,
