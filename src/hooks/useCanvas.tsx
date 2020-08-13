@@ -3,16 +3,18 @@ import { createContext, useContext } from "react";
 import { fabric } from "fabric-with-gestures";
 import { createFileList } from "../utils";
 
-export interface MediaExportType {
-  ({ name: string, duration: number }): Promise<FileList>;
+interface MediaMetadataType {
+  name?: string;
+  duration?: number;
 }
+
 export interface CanvasContextType {
   canvas: any;
   mediaFileList: FileList | undefined;
   createCanvas(canvas: any): void;
   addImage(iamgeURL: string): void;
   addVideo(videoEl: HTMLVideoElement): void;
-  exportCapturingCanvas(MediaExportType): Promise<FileList>;
+  loadCapturingCanvas(metadata: MediaMetadataType): Promise<FileList>;
 }
 
 export const CanvasContext = createContext<CanvasContextType | undefined>(
@@ -59,10 +61,11 @@ export const CanvasProvider: React.FC = ({ children }) => {
     });
   };
 
-  const exportCapturingCanvas: MediaExportType = ({
+  const loadCapturingCanvas = ({
     name = "myvid.mp4",
     duration = 5000,
-  }) => {
+  }): Promise<FileList> => {
+    console.log(name, duration);
     return new Promise((resolve, reject) => {
       try {
         const canvasEl = document.getElementById("canvas") as HTMLCanvasElement;
@@ -105,7 +108,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
   const ctx = {
     canvas,
     mediaFileList,
-    exportCapturingCanvas,
+    loadCapturingCanvas,
     addImage,
     addVideo,
     createCanvas,

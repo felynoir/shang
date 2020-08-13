@@ -4,7 +4,7 @@ import { useCanvas } from "../hooks";
 
 const ratio = [9, 16];
 
-const DesignCanvas = () => {
+const DesignCanvas: React.FC = () => {
   const { createCanvas } = useCanvas();
   const [dimension, setDimension] = useState<number[]>([0, 0]);
   const isFirst = useRef(true);

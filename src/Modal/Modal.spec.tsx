@@ -2,11 +2,6 @@ import React from "react";
 import { render } from "../test-utils";
 import Modal from "./Modal";
 
-interface ModalContainerType {
-  opened: boolean;
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 describe("Modal component", () => {
   const setOpened = jest.fn();
 

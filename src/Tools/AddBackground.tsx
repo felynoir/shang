@@ -32,7 +32,7 @@ const AddBackground = () => {
       console.log(videoEl.videoWidth, videoEl.videoHeight);
       // videoEl.width = ;
       // videoEl.height = 400;
-      videoEl.muted = true;
+      // videoEl.muted = true;
       videoEl.src = fileURL;
       videoEl.onloadedmetadata = (evt) => {
         console.log(videoEl.videoWidth, videoEl.videoHeight);
