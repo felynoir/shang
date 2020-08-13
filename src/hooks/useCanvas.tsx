@@ -74,8 +74,19 @@ export const CanvasProvider: React.FC = ({ children }) => {
           return reject("Canvas Element is not assign");
         }
         // @ts-ignore: Type handling is conflict itself.
-        const stream = canvasEl.captureStream(60);
+        const stream = new MediaStream();
+        const canvasStream = canvasEl.captureStream(60) as MediaStream;
+        stream.addTrack(canvasStream.getTracks()[0]);
         const chunks: Blob[] = [];
+        canvas.getObjects().map((klass) => {
+          const nodeName = klass?._element?.nodeName;
+          if (nodeName === "VIDEO") {
+            const el = klass?._element as HTMLVideoElement;
+            // @ts-ignore: Type handling is conflict itself.
+            const vidStream = el.captureStream() as MediaStream;
+            stream.addTrack(vidStream.getAudioTracks()[0]);
+          }
+        });
         const rec = new MediaRecorder(stream);
         rec.ondataavailable = (e) => {
           chunks.push(e.data);
