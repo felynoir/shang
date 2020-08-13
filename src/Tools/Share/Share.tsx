@@ -7,26 +7,6 @@ const Share = () => {
   const [video, setVideo] = useState<File>();
   const firstRef = useRef(true);
 
-  const takeAction = () => {
-    if (firstRef.current) {
-      startRecordingCanvas();
-      // firstRef.current = false;
-      return;
-    }
-  };
-
-  const getFileList = (file) => {
-    let getDataTransfer: any = () => new DataTransfer();
-    try {
-      getDataTransfer();
-    } catch {
-      getDataTransfer = () => new ClipboardEvent("").clipboardData;
-    }
-    const dataTransfer = getDataTransfer();
-    dataTransfer.items.add(file);
-    return dataTransfer.files;
-  };
-
   const startRecordingCanvas = () => {
     const chunks: Blob[] = [];
     const canvasEl = document.getElementById("canvas");
