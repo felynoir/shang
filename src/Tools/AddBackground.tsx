@@ -29,11 +29,18 @@ const AddBackground = () => {
       const id = `${file.name}-${Math.round(Math.random() * 10)}`;
       const videoEl = document.createElement("video");
       videoEl.id = id;
-      videoEl.width = 400;
-      videoEl.height = 400;
+      console.log(videoEl.videoWidth, videoEl.videoHeight);
+      // videoEl.width = ;
+      // videoEl.height = 400;
       videoEl.muted = true;
       videoEl.src = fileURL;
-      addVideo(videoEl);
+      videoEl.onloadedmetadata = (evt) => {
+        console.log(videoEl.videoWidth, videoEl.videoHeight);
+        videoEl.width = videoEl.videoWidth;
+        videoEl.height = videoEl.videoHeight;
+        addVideo(videoEl);
+      };
+      videoEl.load();
     }
   };
 

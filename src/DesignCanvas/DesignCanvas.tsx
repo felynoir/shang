@@ -5,7 +5,7 @@ import { useCanvas } from "../hooks";
 const ratio = [9, 16];
 
 const DesignCanvas = () => {
-  const { canvas, createCanvas } = useCanvas();
+  const { createCanvas } = useCanvas();
   const [dimension, setDimension] = useState<number[]>([0, 0]);
   const isFirst = useRef(true);
 
@@ -31,6 +31,7 @@ const DesignCanvas = () => {
         width={dimension[0]}
         height={dimension[1]}
       ></canvas>
+      <div id="dd"></div>
     </div>
   );
 };
