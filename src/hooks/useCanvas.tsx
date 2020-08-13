@@ -73,11 +73,15 @@ export const CanvasProvider: React.FC = ({ children }) => {
         if (!canvasEl) {
           return reject("Canvas Element is not assign");
         }
-        // @ts-ignore: Type handling is conflict itself.
+        const chunks: Blob[] = [];
         const stream = new MediaStream();
+
+        // Add main track
+        // @ts-ignore: Type handling is conflict itself.
         const canvasStream = canvasEl.captureStream(60) as MediaStream;
         stream.addTrack(canvasStream.getTracks()[0]);
-        const chunks: Blob[] = [];
+
+        // Loop each Video element in canvas for add audiotrack into stream
         canvas.getObjects().map((klass) => {
           const nodeName = klass?._element?.nodeName;
           if (nodeName === "VIDEO") {
@@ -93,6 +97,8 @@ export const CanvasProvider: React.FC = ({ children }) => {
         };
         rec.onstart = (e) => {
           console.log("start rec");
+
+          // Replay All Video
           canvas.getObjects().map((klass) => {
             console.log(klass);
             if (klass?._element?.nodeName === "VIDEO") {
