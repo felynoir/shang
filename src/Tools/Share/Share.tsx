@@ -14,8 +14,20 @@ const Share = () => {
     }
   };
 
+  const getFileList = (file) => {
+    let getDataTransfer: any = () => new DataTransfer();
+    try {
+      getDataTransfer();
+    } catch {
+      getDataTransfer = () => new ClipboardEvent("").clipboardData;
+    }
+    const dataTransfer = getDataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
+  };
+
   const startRecordingCanvas = () => {
-    alert("start");
+    console.log("start rec");
     const chunks: Blob[] = [];
     const canvas = document.getElementById("canvas");
     const stream = canvas.captureStream();
@@ -26,10 +38,10 @@ const Share = () => {
     };
     rec.onstop = (e) => {
       console.log(chunks);
-      exportVideo(new File(chunks, "mylove.mp4", { type: "video/webm" }));
+      exportVideo(new File(chunks, "mylove.mp4", { type: "video/mp4" }));
     };
     rec.start();
-    setTimeout(() => rec.stop(), 3000); // stop recording in 3s
+    setTimeout(() => rec.stop(), 5000); // stop recording in 3s
   };
 
   const exportVideo = async (video: File) => {
@@ -39,18 +51,20 @@ const Share = () => {
       window.open(URL.createObjectURL(video));
       return;
     }
-    // if (!navigator.canShare || !navigator.canShare({ files })) {
-    //   console.log("Error: Unsupported feature: navigator.canShare()");
-    //   return;
-    // }
+    const files = getFileList(video);
     const data = {
       title: "web.dev",
       text: "Check out web.dev.",
       url: "https://web.dev/",
-      files: [video],
+      files,
     };
-    const fileList = new FileList();
-    fileList.console.log(data);
+    console.log(data, URL.createObjectURL(files[0]));
+
+    if (!navigator.canShare || !navigator.canShare({ files })) {
+      console.log("Error: Unsupported feature: navigator.canShare()");
+      return;
+    }
+
     try {
       await navigator.share(data);
     } catch (error) {
