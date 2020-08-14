@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Dragonfly161518/shang#readme",
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.8.3",
     "ccapture.js": "^1.1.0",
     "fabric": "^3.6.3",
     "fabric-with-gestures": "^4.0.0",
@@ -24,6 +25,7 @@
     "parcel-bundler": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "recordrtc": "^5.6.1",
     "tailwindcss": "^1.6.2",
     "typescript": "^3.9.7"
   },

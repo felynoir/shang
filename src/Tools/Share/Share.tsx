@@ -10,7 +10,7 @@ const Share = () => {
 
   const handleExport = async () => {
     if (!mediaFileList) return;
-    console.log("media files ", FileList);
+    console.log("media files ", mediaFileList);
     if (navigator.share === undefined) {
       console.log("Error: Unsupported feature: navigator.share()");
       window.open(URL.createObjectURL(mediaFileList[0]));

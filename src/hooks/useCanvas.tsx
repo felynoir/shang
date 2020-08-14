@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { createContext, useContext } from "react";
 import { fabric } from "fabric-with-gestures";
 import { createFileList } from "../utils";
+import RecordRTC from "recordrtc";
+import { createFFmpeg } from "@ffmpeg/ffmpeg";
 // import * as CCapture from "ccapture.js";
 
 interface MediaMetadataType {
@@ -66,13 +68,32 @@ export const CanvasProvider: React.FC = ({ children }) => {
     name = "myvid.webm",
     duration = 5000,
   }): Promise<FileList> => {
-    console.log(name, duration);
+    var types = [
+      "video/webm",
+      "audio/webm",
+      "video/webm;codecs=vp8",
+      "video/webm;codecs=daala",
+      "video/webm;codecs=h264",
+      "audio/webm;codecs=opus",
+      "video/mpeg",
+    ];
+
+    for (var i in types) {
+      console.log(
+        "Is " +
+          types[i] +
+          " supported? " +
+          (MediaRecorder.isTypeSupported(types[i]) ? "Maybe!" : "Nope :(")
+      );
+    }
+
     return new Promise((resolve, reject) => {
       try {
         const canvasEl = document.getElementById("canvas") as HTMLCanvasElement;
         if (!canvasEl) {
           return reject("Canvas Element is not assign");
         }
+
         const chunks: Blob[] = [];
         const stream = new MediaStream();
 
@@ -91,7 +112,10 @@ export const CanvasProvider: React.FC = ({ children }) => {
             stream.addTrack(vidStream.getAudioTracks()[0]);
           }
         });
-        const rec = new MediaRecorder(stream);
+        const options = {
+          mimeType: "video/webm",
+        };
+        const rec = new MediaRecorder(stream, options);
         rec.ondataavailable = (e) => {
           chunks.push(e.data);
         };
@@ -108,10 +132,13 @@ export const CanvasProvider: React.FC = ({ children }) => {
             }
           });
         };
-        rec.onstop = (e) => {
+        rec.onstop = async (e) => {
           console.log("end rec => ", chunks);
-          const media = new File(chunks, name, { type: "video/webm" });
-          const fileList = createFileList([media]);
+          const file = await convertStream(
+            new Uint8Array(await new Blob(chunks).arrayBuffer())
+          );
+          // const file = new File(chunks, name, { type: "video/webm" });
+          const fileList = createFileList([file]);
           setMediaFileList(fileList);
           resolve(fileList);
         };
@@ -123,9 +150,17 @@ export const CanvasProvider: React.FC = ({ children }) => {
     });
   };
 
-  // const loadCanvasViaCCapture = () => {
-  //   const capturer = new CCapture({ format: "webm" });
-  // };
+  const convertStream = async (buffData: Uint8Array): Promise<File> => {
+    console.log("converting stream");
+    const ffmpeg = createFFmpeg({
+      log: true,
+    });
+    await ffmpeg.load();
+    await ffmpeg.write("test.webm", buffData);
+    await ffmpeg.transcode("test.webm", "myvid.mp4");
+    const data = await ffmpeg.read("myvid.mp4");
+    return new File([data.buffer], "myvid.mp4", { type: "video/mp4" });
+  };
 
   const ctx = {
     canvas,
