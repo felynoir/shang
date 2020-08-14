@@ -78,6 +78,7 @@ const Share = () => {
           </div>
         )}
       />
+      <div id="logging"></div>
     </>
   );
 };
