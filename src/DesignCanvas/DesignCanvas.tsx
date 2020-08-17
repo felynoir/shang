@@ -11,7 +11,8 @@ const DesignCanvas = () => {
 
   useEffect(() => {
     const height = Math.floor(window.innerHeight / ratio[1]) * ratio[1];
-    setDimension([(height / ratio[1]) * ratio[0], height]);
+    // setDimension([(height / ratio[1]) * ratio[0], height]);
+    setDimension([350, 624]);
   }, []);
 
   useEffect(() => {

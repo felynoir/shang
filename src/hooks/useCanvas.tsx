@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { createContext, useContext } from "react";
 import { fabric } from "fabric-with-gestures";
 import { createFileList } from "../utils";
-import RecordRTC from "recordrtc";
-import { createFFmpeg } from "@ffmpeg/ffmpeg";
-import { resolvePlugin } from "@babel/core";
+import axios from "axios";
+import request from "request";
+// import { createFFmpeg } from "@ffmpeg/ffmpeg";
+// const ffmpeg = require("ffmpeg.js/ffmpeg-webm.js")
 // import * as CCapture from "ccapture.js";
 
 interface MediaMetadataType {
@@ -106,7 +107,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
           }
         });
         const options = {
-          mimeType: "video/webm",
+          mimeType: "video/webm; codecs=vp9,opus",
         };
         const rec = new MediaRecorder(stream, options);
         rec.ondataavailable = (e) => {
@@ -130,8 +131,12 @@ export const CanvasProvider: React.FC = ({ children }) => {
           // const file = await convertStream(
           //   new Uint8Array(await new Blob(chunks).arrayBuffer())
           // );
+          const blob = await convertViaApi(
+            new File(chunks, name, { type: "video/webm" })
+          );
+          const file = new File([blob], "myvid.mp4", { type: "video/mp4" });
           // const file = new File(chunks, name, { type: "video/webm" });
-          const file = await convertStream(new Blob(chunks));
+          // const file = await convertStreamV2(new Blob(chunks));
           const fileList = createFileList([file]);
           setMediaFileList(fileList);
           resolve(fileList);
@@ -142,6 +147,22 @@ export const CanvasProvider: React.FC = ({ children }) => {
         reject(err);
       }
     });
+  };
+
+  const convertViaApi = async (file: File): Promise<Blob> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    console.log("call");
+    const res = await axios.post(
+      `https://ffmpeg-api-17012.herokuapp.com/`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        responseType: "blob",
+      }
+    );
+    console.log(res, res.data);
+    return res.data;
   };
 
   const convertStream = (videoBlob: Blob): Promise<File> => {
@@ -245,17 +266,56 @@ export const CanvasProvider: React.FC = ({ children }) => {
     });
   };
 
-  const convertStreamFFmpeg = async (buffData: Uint8Array): Promise<File> => {
-    console.log("converting stream");
-    const ffmpeg = createFFmpeg({
-      log: true,
+  const convertStreamV2 = async (blob: Blob): Promise<File> => {
+    const testData = new Uint8Array(await blob.arrayBuffer());
+    let stdout = "";
+    let stderr = "";
+    // Print FFmpeg's version.
+    ffmpeg({
+      arguments: ["-version"],
+      print: function (data) {
+        stdout += data + "\n";
+      },
+      printErr: function (data) {
+        stderr += data + "\n";
+      },
+      onExit: function (code) {
+        console.log("Process exited with code " + code);
+        console.log(stdout);
+        console.log(stderr);
+      },
     });
-    await ffmpeg.load();
-    await ffmpeg.write("test.webm", buffData);
-    await ffmpeg.transcode("test.webm", "myvid.mp4");
-    const data = await ffmpeg.read("myvid.mp4");
-    return new File([data.buffer], "myvid.mp4", { type: "video/mp4" });
+    // Encode test video to VP8.
+    console.log(testData);
+    const result = ffmpeg({
+      MEMFS: [{ name: "test.webm", data: testData }],
+      arguments: [
+        "-i",
+        "test.webm",
+        "-crf",
+        "51",
+        "-preset",
+        "superfast",
+        "out.mp4",
+      ],
+    });
+    // Write out.webm to disk.
+    const out = result.MEMFS[0];
+    console.log("res", out);
+    return new File(out.data, "out.mp4");
   };
+
+  // const convertStreamFFmpeg = async (buffData: Uint8Array): Promise<File> => {
+  //   console.log("converting stream");
+  //   const ffmpeg = createFFmpeg({
+  //     log: true,
+  //   });
+  //   await ffmpeg.load();
+  //   await ffmpeg.write("test.webm", buffData);
+  //   await ffmpeg.transcode("test.webm", "myvid.mp4");
+  //   const data = await ffmpeg.read("myvid.mp4");
+  //   return new File([data.buffer], "myvid.mp4", { type: "video/mp4" });
+  // };
 
   const ctx = {
     canvas,
