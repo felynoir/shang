@@ -68,16 +68,16 @@ export const CanvasProvider: React.FC = ({ children }) => {
 
   const loadCapturingCanvas = ({
     name = "myvid.webm",
-    duration = 5000,
+    duration = 10000,
   }): Promise<FileList> => {
     var types = [
-      "video/webm",
+      "video/mpeg4",
+      "video/webm;codecs=h264",
       "video/webm;codecs=h265",
       "video/webm;codecs=vp8",
       "video/webm;codecs=daala",
-      "video/webm;codecs=h264",
       "audio/webm;codecs=opus",
-      "video/mpeg",
+      "video/webm",
     ];
     console.log(types.filter((i) => MediaRecorder.isTypeSupported(i)));
 
@@ -107,7 +107,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
           }
         });
         const options = {
-          mimeType: "video/webm; codecs=vp9,opus",
+          mimeType: "video/webm; codecs=vp8,opus",
         };
         const rec = new MediaRecorder(stream, options);
         rec.ondataavailable = (e) => {
@@ -128,15 +128,11 @@ export const CanvasProvider: React.FC = ({ children }) => {
         };
         rec.onstop = async (e) => {
           console.log("end rec => ", chunks);
-          // const file = await convertStream(
-          //   new Uint8Array(await new Blob(chunks).arrayBuffer())
-          // );
-          const blob = await convertViaApi(
-            new File(chunks, name, { type: "video/webm" })
-          );
+          const webm = new File(chunks, name, { type: "video/webm" });
+          console.log("webm", webm, URL.createObjectURL(webm));
+          const blob = await convertViaApi(webm);
           const file = new File([blob], "myvid.mp4", { type: "video/mp4" });
-          // const file = new File(chunks, name, { type: "video/webm" });
-          // const file = await convertStreamV2(new Blob(chunks));
+          console.log("mpeg4 after convert", file, URL.createObjectURL(file));
           const fileList = createFileList([file]);
           setMediaFileList(fileList);
           resolve(fileList);
