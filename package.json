@@ -20,7 +20,7 @@
     "@ffmpeg/ffmpeg": "^0.8.3",
     "@types/axios": "^0.14.0",
     "@types/request": "^2.48.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "ccapture.js": "^1.1.0",
     "fabric": "^3.6.3",
     "fabric-with-gestures": "^4.0.0",
